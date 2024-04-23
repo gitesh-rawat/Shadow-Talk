@@ -16,17 +16,27 @@ interface Params{
 export async function createPost({text,author,communityId,path}: Params){
     try {
         connectToDB();
+     const communityIdObject = await Community.findOne(
+      { id: communityId },
+      { _id: 1 }
+    );
 
     const createdPost = await Post.create({
         text,
         author,
-        community: null,
+        community: communityIdObject,
     });
 
      // Update user model
     await User.findByIdAndUpdate(author,{
         $push: { posts: createdPost._id }
     })
+    if (communityIdObject) {
+      // Update Community model
+      await Community.findByIdAndUpdate(communityIdObject, {
+        $push: { threads: createdPost._id },
+      });
+    }
     revalidatePath(path);
     } catch (error: any) {
      throw new Error(`Error creating post: ${error.message}`)  

@@ -3,9 +3,9 @@
 import { FilterQuery, SortOrder } from "mongoose";
 import Post from "../models/post.model";
 import User from "../models/user.model";
+import Community from "../models/community.model";
 import { connectToDB } from "../mongoose";
 import { revalidatePath } from "next/cache";
-import { skip } from "node:test";
 
 interface Params{
     userID:string;
@@ -15,8 +15,8 @@ interface Params{
     path: string;
 }
 
-export async function updateUser
-({userID, username, bio, image, path}: Params):Promise<void> {
+export async function updateUser({userID, username, bio, image, path}:
+     Params):Promise<void> {
     connectToDB();
 
 try{
@@ -40,8 +40,10 @@ export async function fetchUser(userId:string) {
     try{
         connectToDB();
 
-        return await User.findOne({ id:userId})
-        // .populate({ path: 'communities', model: 'Community'})
+        return await User.findOne({ id:userId}).populate({
+            path: "communities",
+            model: Community,
+          });
     } catch (error: any){
         throw new Error(`Failted to fetch user: ${error.message}`)
     } 
@@ -55,15 +57,22 @@ export async function fetchUserPosts(userId: string){
             .populate({
                 path: 'posts',
                 model: Post,
-                populate: {
-                    path: 'children',
-                    model: Post,
-                    populate: {
-                        path: 'author',
+                populate: [
+                    {
+                      path: "community",
+                      model: Community,
+                      select: "name id image _id", // Select the "name" and "_id" fields from the "Community" model
+                    },
+                    {
+                      path: "children",
+                      model: Post,
+                      populate: {
+                        path: "author",
                         model: User,
-                        select:'username image id'
-                    }
-                }
+                        select: "name image id", // Select the "name" and "_id" fields from the "User" model
+                      },
+                    },
+                  ],
             })
             return posts;
     } catch(error:any){
@@ -96,7 +105,7 @@ export async function fetchUsers({
         if(searchString.trim() !== ''){
             query.$or =[
                 { username: { $regex: regex }}
-            ]
+            ];
         }
 
         const sortOptions = { createdAt: sortBy};
@@ -113,7 +122,8 @@ export async function fetchUsers({
 
         return {users, isNext};
     } catch (error: any) {
-        throw new Error(`Failed to fetch users: ${error.message}`)
+        console.error("Error fetching users:", error);
+    throw error;
     }
 }
 
@@ -137,6 +147,7 @@ export async function getActivity(userId: string){
 
         return replies;
     } catch (error: any) {
-        throw new Error(`Failed to fetch activity: ${error.message}`)
+        console.error("Error fetching replies: ", error);
+    throw error;
     }
 }
