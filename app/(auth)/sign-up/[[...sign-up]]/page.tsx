@@ -65,71 +65,81 @@ export default function SignUpForm() {
   };
  
   return (
-    <div>
-      {/* Rendering error message */}
+    <div className="flex justify-center items-center bg-gray-100 rounded-md">
       {errorMessage && (
-        <div style={{ color: 'red' }}>{errorMessage}</div>
+        <div className="text-red-500 mb-4">{errorMessage}</div>
       )}
       {!pendingVerification && (
-        <div style={{ backgroundColor: '#14213d', padding: '60px', borderRadius: '15px', boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}>
-        <p className="flex flex-col items-center mb-10 text-primary-500"  style={{ fontSize: '30px'}}>
+        <div className="glowing-form-bg bg-white p-10 rounded-lg shadow-lg">
+        <p className="text-3xl mb-6 text-center text-primary-500 font-semibold">
           Welcome to Shadow Talk
         </p>
-        <form className="flex flex-col ">
-          <div className="flex-col w-full gap-3">
-              <label htmlFor="email" className="text-light-1" style={{ fontSize: '30px', fontWeight: 500 }}>Email:</label>
+        <form className="flex flex-col space-y-4">
+          <div className="flex flex-col">
+              <label htmlFor="email" className="text-lg font-medium text-gray-700">Email:</label>
               <div>
                 <input
                   onChange={(e) => setEmailAddress(e.target.value)}
                   id="email"
                   name="email"
                   type="email"
-                  className="no-focus rounded h-10"
+                  className="rounded-lg border border-gray-300 px-4 py-2 focus:outline-none"
                   placeholder="Enter your DSEU email"
-                  style={{ fontSize: '24px', fontWeight: 350}}
                 />
               </div>
             </div>
-            <div className="flex-col w-full gap-3 mt-5">
-              <label htmlFor="password" className=" text-light-2"  style={{ fontSize: '30px', fontWeight: 500 }}>Password:</label>
+            <div className="flex flex-col">
+              <label htmlFor="password" className=" text-lg font-medium text-gray-700">Password:</label>
               <div className="relative">
                 <input
                   onChange={(e) => setPassword(e.target.value)}
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
-                  className="no-focus rounded h-10"
+                  className="rounded-lg border border-gray-300 px-4 py-2 focus:outline-none"
                   placeholder="Create a password"
-                  style={{ fontSize: '24px', fontWeight: 350 }}
                 />
                 <img
                   src={showPassword ? "/assets/open-eye.svg" : "/assets/closed-eye.svg"}
                   alt={showPassword ? "Hide password" : "Show password"}
-                  className="absolute top-1/2 right-12 transform -translate-y-1/2 cursor-pointer w-6 h-6"
+                  className="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer w-6 h-6"
                   onClick={() => setShowPassword(!showPassword)}
                   />
                 </div>
             </div>
-          <Button onClick={handleSubmit} className="bg-primary-500 mt-10"  style={{ fontSize: '24px', fontWeight: 'bold' }}>Sign up</Button>
+          <Button onClick={handleSubmit} className="bg-primary-500 text-white font-semibold py-2 rounded-md hover:bg-primary-600 transition duration-300">Sign up</Button>
         </form>
         </div>
       )}
       {pendingVerification && (
-        <div>
-          <form className="flex flex-col items-center">
+        <div className="glowing-form-bg bg-white p-10 rounded-lg shadow-lg">
+          <form className="flex flex-col items-center space-y-4">
             <input
-              className="h-6 rounded p-7 border-4 border-gray-1 mb-4"
+              className="rounded-lg border border-gray-300 px-4 py-2 focus:outline-none"
               value={code}
               placeholder="Enter Verification Code"
               onChange={(e) => setCode(e.target.value)}
-              style={{ fontSize: '24px', fontWeight: 500 }}
             />
-            <button onClick={onPressVerify}className="flex flex-col bg-primary-500 rounded p-2 text-light-1" style={{ fontSize: '24px', fontWeight: 500 }}>
+            <button onClick={onPressVerify}className="bg-primary-500 text-white font-semibold py-2 rounded-md hover:bg-primary-600 transition duration-300">
               Verify Email
             </button>
           </form>
         </div>
       )}
+      <style jsx>{`
+        .glowing-form-bg {
+          animation: glowing 1500ms infinite alternate;
+        }
+
+        @keyframes glowing {
+          from {
+            box-shadow: 0 0 10px 0 rgba(29, 155, 209, 0.8);
+          }
+          to {
+            box-shadow: 0 0 20px 10px rgba(29, 155, 209, 0.8);
+          }
+        }
+      `}</style>
     </div>
   );
 }

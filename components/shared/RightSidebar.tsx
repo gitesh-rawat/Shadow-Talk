@@ -3,7 +3,7 @@ function RightSidebar() {
         <section className="custom-scrollbar rightsidebar">
             <div className="flex flex-1 flex-col
             justify-start">
-                <div className="flex mb-40">
+                <div className="mb-40">
                     <h3 className="text-heading4-medium 
                     text-light-1">Suggested Communities</h3>
                 </div>
