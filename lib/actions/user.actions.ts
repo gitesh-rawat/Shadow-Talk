@@ -52,16 +52,14 @@ export async function fetchUser(userId:string) {
 export async function fetchUserPosts(userId: string){
     try{
         connectToDB();
-        //TODO: populate community
-        const posts = await User.findOne({ id: userId })
-            .populate({
-                path: 'posts',
+        const posts = await User.findOne({ id: userId }).populate({
+                path: "posts",
                 model: Post,
                 populate: [
                     {
                       path: "community",
                       model: Community,
-                      select: "name id image _id", // Select the "name" and "_id" fields from the "Community" model
+                      select: "name id image _id",
                     },
                     {
                       path: "children",
@@ -69,7 +67,7 @@ export async function fetchUserPosts(userId: string){
                       populate: {
                         path: "author",
                         model: User,
-                        select: "name image id", // Select the "name" and "_id" fields from the "User" model
+                        select: "username image id", 
                       },
                     },
                   ],

@@ -9,13 +9,13 @@ interface Props {
     parentId: string | null;
     content: string;
     author: {
-        name: string;
+        username: string;
         image: string;
         id: string;
     }
     community:{
         id: string;
-        name: string;
+        username: string;
         image: string;
     } | null;
     createdAt: string;
@@ -57,7 +57,7 @@ const PostCard =({
 
                     <div className="flex w-full flex-col">
                     <Link href={`/profile/${author.id}`} className="w-fit">
-                        <h4 className="cursor-pointer text-base-semibold text-light-1">{author.name}</h4>
+                        <h4 className="cursor-pointer text-base-semibold text-light-1">{author.username}</h4>
                     </Link>
 
                     <p className="mt-2 text-small-regular text-light-2">{content}</p>
@@ -121,13 +121,13 @@ const PostCard =({
           className='mt-5 flex items-center'
         >
           <p className='text-subtle-medium text-gray-1'>
-            {formatDateString(createdAt)}
-            {" "}-{community && ` - ${community.name} Community`}
+            {formatDateString(createdAt)} -{" "}
+            {community.username} Community -{" "}
           </p>
 
           <Image
             src={community.image}
-            alt={community.name}
+            alt={community.username}
             width={14}
             height={14}
             className='ml-1 rounded-full object-cover'

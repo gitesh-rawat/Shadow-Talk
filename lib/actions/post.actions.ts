@@ -137,7 +137,7 @@ export async function addCommentToPost(
             throw new Error(`Error adding comment to post: ${error.message}`)
         }
 }
-async function fetchAllChildPosts(postId: string): Promise<any[]> {
+export async function fetchAllChildPosts(postId: string): Promise<any[]> {
     const childPosts = await Post.find({ parentId: postId });
   
     const descendantPosts = [];

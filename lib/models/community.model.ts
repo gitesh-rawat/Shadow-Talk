@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { string } from "zod";
 
 const communitySchema = new mongoose.Schema({
     id: { type: String, required: true},

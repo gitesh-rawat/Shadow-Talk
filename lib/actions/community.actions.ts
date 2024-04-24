@@ -3,10 +3,9 @@
 import { FilterQuery, SortOrder } from "mongoose";
 
 import Community from "../models/community.model";
-import Thread from "../models/post.model";
 import User from "../models/user.model";
-
 import { connectToDB } from "../mongoose";
+import Post from "../models/post.model";
 
 export async function createCommunity(
   id: string,
@@ -14,21 +13,19 @@ export async function createCommunity(
   username: string,
   image: string,
   bio: string,
-  createdById: string // Change the parameter name to reflect it's an id
+  createdById: string 
 ) {
   try {
     connectToDB();
 
-    // Find the user with the provided unique id
     const user = await User.findOne({ id: createdById });
 
     if (!user) {
-      throw new Error("User not found"); // Handle the case if the user with the id is not found
+      throw new Error("User not found");
     }
 
     const newCommunity = new Community({
       id,
-      name,
       username,
       image,
       bio,
@@ -58,7 +55,7 @@ export async function fetchCommunityDetails(id: string) {
       {
         path: "members",
         model: User,
-        select: "name username image _id id",
+        select: "username image _id id",
       },
     ]);
 
@@ -74,18 +71,18 @@ export async function fetchCommunityPosts(id: string) {
   try {
     connectToDB();
 
-    const communityPosts = await Community.findById(id).populate({
-      path: "threads",
-      model: Thread,
+    const communityPosts = await Community.findOne({ id }).populate({
+      path: "posts",
+      model: Post,
       populate: [
         {
           path: "author",
           model: User,
-          select: "name image id", // Select the "name" and "_id" fields from the "User" model
+          select: "username image id", // Select the "name" and "_id" fields from the "User" model
         },
         {
           path: "children",
-          model: Thread,
+          model: Post,
           populate: {
             path: "author",
             model: User,
@@ -282,8 +279,8 @@ export async function deleteCommunity(communityId: string) {
       throw new Error("Community not found");
     }
 
-    // Delete all threads associated with the community
-    await Thread.deleteMany({ community: communityId });
+    // Delete all posts associated with the community
+    await Post.deleteMany({ community: communityId });
 
     // Find all users who are part of the community
     const communityUsers = await User.find({ communities: communityId });

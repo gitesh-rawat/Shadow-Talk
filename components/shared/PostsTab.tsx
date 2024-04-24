@@ -1,46 +1,85 @@
-import { fetchUserPosts } from "@/lib/actions/user.actions";
 import { redirect } from "next/navigation";
-import PostCard from "../cards/PostCard";
 import { fetchCommunityPosts } from "@/lib/actions/community.actions";
+import { fetchUserPosts } from "@/lib/actions/user.actions";
+import { fetchAllChildPosts } from "@/lib/actions/post.actions";
+import PostCard from "../cards/PostCard";
 
-interface Props {
-    currentUserId: string;
-    accountId: string;
-    accountType: string;
+interface Result {
+  username: string;
+  name: string;
+  image: string;
+  id: string;
+  posts: {
+    _id: string;
+    text: string;
+    parentId: string | null;
+    author: {
+      username: string;
+      image: string;
+      id: string;
+    };
+    community: {
+      id: string;
+      username: string;
+      image: string;
+    } | null;
+    createdAt: string;
+    children: {
+      author: {
+        image: string;
+      };
+    }[];
+  }[];
 }
 
-const PostsTab = async ( {currentUserId, accountId, accountType}: Props) => {
+interface Props {
+  currentUserId: string;
+  accountId: string;
+  accountType: string;
+}
 
-    let result: any;
+async function PostsTab({ currentUserId, accountId, accountType }: Props) {
+  let result: Result;
+  if (accountType === "Community") {
+    result = await fetchCommunityPosts(accountId);
+  } else {
+    result = await fetchUserPosts(accountId);
+  }
 
-    if(accountType === "Community"){
-        result = await fetchCommunityPosts(accountId);
-    }else {
-        result = await fetchUserPosts(accountId);
-    }
+  if (!result) {
+    redirect("/");
+  }
 
-    if(!result) redirect('/')
+  return (
+    <section className='mt-9 flex flex-col gap-10'>
 
-    return(
-        <section className="mt-9 flex flex-col gap-10">
-            {result.posts.map((post: any) => (
-            <PostCard 
-               key={post._id}
-               id={post._id}
-               currentUserId={currentUserId}
-               parentId={post.parentId}
-               content={post.text}
-               author={accountType === 'User'
-                ?{name: result.username, image: result.image, id: result.id}
-                :{name: post.author.username, image: post.author.image, id: post.author.id}
-               } //TODO
-               community={post.community} //TODO
-               createdAt={post.createdAt}
-               comments={post.children}/>
-            ))}
-            
-        </section>
-    )
+      {result.posts.map((post) => (
+        <PostCard
+          key={post._id}
+          id={post._id}
+          currentUserId={currentUserId}
+          parentId={post.parentId}
+          content={post.text}
+          author={
+            accountType === "User"
+              ? { username: result.username , image: result.image, id: result.id }
+              : {
+                  username: post.author.username,
+                  image: post.author.image,
+                  id: post.author.id,
+                }
+          }
+          community={
+            accountType === "Community"
+              ? { id: result.id, username: result.username, image: result.image }
+              : post.community
+          }
+          createdAt={post.createdAt}
+          comments={post.children}
+        />
+      ))}
+    </section>
+  );
 }
 
 export default PostsTab;

@@ -28,7 +28,7 @@ async function Page({params}: {params: {id: string}}) {
                 <Tabs defaultValue="posts" className="w-full">
                     <TabsList className="tab">
                         {communityTabs.map((tab)=>(
-                            <TabsTrigger key={tab.label} value="tab.value" className="tab">
+                            <TabsTrigger key={tab.label} value={tab.value} className="tab">
                                 <Image 
                                     src={tab.icon}
                                     alt={tab.label}
@@ -72,16 +72,11 @@ async function Page({params}: {params: {id: string}}) {
                         </TabsContent>
                         <TabsContent value="requests"
                         className="w-full text-light-1">
-                            <PostsTab 
-                                currentUserId={user.id}
-                                accountId={communityDetails.id}
-                                accountType="Community"
-                            />
                         </TabsContent>
                 </Tabs>
             </div>
         </section>
-    )
+    );
 }
 
 export default Page;
