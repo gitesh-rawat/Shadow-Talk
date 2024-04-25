@@ -26,7 +26,6 @@ export default function RootLayout({
     <ClerkProvider>
     <html lang="en">
       <body className={inter.className}>
-      <h1 className='text-heading4-medium text-light-1'>Welcome to Shadow Talk</h1>
         <Topbar />
         
         <main className="flex flex-row">

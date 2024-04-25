@@ -8,7 +8,7 @@ export default async function Home() {
 
   return (
     <div>
-      <h1 className="head-text text-left text-dark-1"> Home</h1>
+      <h1 className="head-text text-left text-light-1"> Welcome to Shadow Talk</h1>
       <section className="mt-9 flex flex-col gap-10"> 
         {result.posts.length === 0 ?(
           <p className="no-result"> No Posts Found</p>
