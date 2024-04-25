@@ -30,7 +30,7 @@ export default function RootLayout({
         
         <main className="flex flex-row">
           <LeftSidebar />
-
+          <h1 className='text-heading4-medium text-light-1'>Welcome to Shadow Talk</h1>
           <section className="main-container">
             <div className="w-full max-w-4xl">
               {children}
