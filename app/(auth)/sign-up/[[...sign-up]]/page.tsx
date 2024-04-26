@@ -84,7 +84,7 @@ export default function SignUpForm() {
                   name="email"
                   type="email"
                   className="rounded-lg border border-gray-300 px-4 py-2 focus:outline-none"
-                  placeholder="Enter your DSEU email"
+                  placeholder="Enter a DSEU or JIMS email"
                 />
               </div>
             </div>
