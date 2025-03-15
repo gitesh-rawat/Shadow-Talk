@@ -20,10 +20,10 @@ export default function SignUpForm() {
     if (!isLoaded) {
       return;
     }
-    if (!emailAddress.endsWith("@dseu.ac.in") && !emailAddress.endsWith("@jimsindia.org")) {
-      setErrorMessage("Use an Email affiliated with DSEU or JIMS please!");
-      return;
-    }
+    // if (!emailAddress.endsWith("@dseu.ac.in") && !emailAddress.endsWith("@jimsindia.org")) {
+    //   setErrorMessage("Use an Email affiliated with DSEU or JIMS please!");
+    //   return;
+    // }
  
     try {
       await signUp.create({
